@@ -56,7 +56,7 @@ class TspGame():
 
         G = from_networkx(current_graph)
         G.x = torch.stack([G.visited.float(),
-                        G.first.float(),
+                        G.start.float(),
                         G.current.float(),
                         G.x.float(),
                         G.y.float()]).T
