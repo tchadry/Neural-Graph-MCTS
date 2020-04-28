@@ -8,7 +8,7 @@ class TspGame():
 
     def __init__(self, n):
         self.n = n
-        self.graph = util.random_graph()
+        self.graph = util.random_graph(n)
 
     def getActionSize(self):
         """
