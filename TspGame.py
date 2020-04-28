@@ -97,8 +97,6 @@ class TspGame():
             pay += self.graph[u][v]['weight']
         return pay
 
-    
-    # TODO: ADD METHOD TO SOLVE 
     def optimal_solution(self):
         
         optimal_path = None
