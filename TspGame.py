@@ -1,8 +1,10 @@
 from torch_geometric.utils.convert import from_networkx
 from itertools import permutations
 import util
+import numpy as np
+import torch
 
-class TspGame(Game):
+class TspGame():
 
     def __init__(self, n):
         self.n = n
