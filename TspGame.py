@@ -62,7 +62,7 @@ class TspGame():
                         G.y.float()]).T
 
         G.current = None
-        G.first = None
+        G.start = None
         G.visited = None
         G.x = None
         G.y = None
