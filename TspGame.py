@@ -28,7 +28,7 @@ class TspGame():
             path and pay of move (negative of distance between 2 nodes)
         """
 
-        pay = -(self.graph[[path[-1]]][action]['weight'])
+        pay = -(self.graph[path[-1]][action]['weight'])
         if len(path) == self.n - 1:
             pay -= self.graph[path[0]][action]['weight']
         return (path + [action], pay)
