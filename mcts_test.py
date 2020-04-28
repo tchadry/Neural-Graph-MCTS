@@ -16,6 +16,7 @@ def create_mcts_games( n, nodes):
     for i in range(n):
 
         current = TspGame(8)
+        optimal_res, _ = current.optimal_solution()
         games.append(current)
         optimal_results.append(optimal_res)
         
