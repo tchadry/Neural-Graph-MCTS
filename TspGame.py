@@ -67,7 +67,7 @@ class TspGame():
         G.x = None
         G.y = None
 
-        print(G)
+        #print(G)
         return G
 
     def getValidMoves(self, path):
