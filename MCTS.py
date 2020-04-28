@@ -160,5 +160,5 @@ class MCTS():
             self.Qsa[(current_path, a)] = v
             self.Nsa[(current_path, a)] = 1
 
-        self.Ns[current_path[0]] += 1
+        self.Ns[current_path] += 1
         return -v
