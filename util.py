@@ -3,7 +3,8 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def random_graph(n_nodes = 8):
+
+def random_graph(n_nodes=8):
 
     # generate complete graph
     graph = nx.complete_graph(n_nodes)
@@ -23,3 +24,32 @@ def random_graph(n_nodes = 8):
 
 # print(random_graph())
 # nx.draw(random_graph())
+
+# first we define the average meter, which is class used in alphazero
+
+
+class AverageMeter(object):
+    """
+     Computes and stores the average and current value
+       Imported from https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262
+    """
+
+    def __init__(self):
+        self.reset()
+    
+    def reset(self):
+        self.val=0
+        self.avg=0
+        self.sum=0
+        self.count=0
+  
+    def update(sel,val,n=1):
+        self.val=val
+        self.sum+=val*n
+        self.count+=n
+        self.avg=self.sum/self.count
+
+
+class dotdict(dict):
+    def __getattr__(self, name):
+        return self[name]
