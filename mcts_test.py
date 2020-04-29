@@ -5,7 +5,7 @@ from TspGame import TspGame
 from util import dotdict
 
 
-def create_mcts_games( n, nodes):
+def create_mcts_games(num_games, nodes=8):
     """
     returns list of games and list of optimal game values
     """
@@ -13,9 +13,9 @@ def create_mcts_games( n, nodes):
     games = []
     optimal_results = []
 
-    for i in range(n):
+    for i in range(num_games):
 
-        current = TspGame(n)
+        current = TspGame(nodes)
         optimal_res, _ = current.optimal_solution()
         games.append(current)
         optimal_results.append(optimal_res)
@@ -23,7 +23,7 @@ def create_mcts_games( n, nodes):
     return games, optimal_results
 
 
-def run_simulations(game, simulations, n):
+def run_simulations(game, simulations, nodes):
     """
     Given a TSP problem, run MCTS with `n_simulations`
     simulations before choosing an action.
@@ -33,7 +33,7 @@ def run_simulations(game, simulations, n):
 
     args = dotdict({
         'numMCTSSims': simulations,
-        'n_nodes': n,
+        'n_nodes': nodes,
         'cpuct': 1
         })
 
@@ -57,7 +57,7 @@ def run_simulations(game, simulations, n):
 
 
 
-games, optimal = create_mcts_games(20, 10)
+games, optimal = create_mcts_games(20, 8)
 
 
 
