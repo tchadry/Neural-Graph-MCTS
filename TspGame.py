@@ -66,14 +66,14 @@ class TspGame():
         G.x = torch.stack([G.visited.float(),
                         G.start.float(),
                         G.current.float(),
-                        G.x.float(),
-                        G.y.float()]).T
+                        G.x_pos.float(),
+                        G.y_pos.float()]).T
 
         G.current = None
         G.start = None
         G.visited = None
-        G.x = None
-        G.y = None
+        G.x_pos = None
+        G.y_pos = None
 
         #print(G)
         return G

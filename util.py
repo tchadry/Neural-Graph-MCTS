@@ -13,12 +13,12 @@ def random_graph(n_nodes=8):
         graph.nodes[node]['visited'] = False
         graph.nodes[node]['start'] = False
         graph.nodes[node]['current'] = False
-        graph.nodes[node]['x'] = random.uniform(0, 1)
-        graph.nodes[node]['y'] = random.uniform(0, 1)
+        graph.nodes[node]['x_pos'] = random.uniform(0, 1)
+        graph.nodes[node]['y_pos'] = random.uniform(0, 1)
     for u, v, data in graph.edges(data=True):
         graph[u][v]['weight'] = np.linalg.norm(
-            [graph.nodes[u]['x'] - graph.nodes[v]['x'],
-            graph.nodes[u]['y'] - graph.nodes[v]['y']]
+            [graph.nodes[u]['x_pos'] - graph.nodes[v]['x_pos'],
+            graph.nodes[u]['y_pos'] - graph.nodes[v]['y_pos']]
         )
     return graph
 
