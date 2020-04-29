@@ -11,9 +11,13 @@ from torch_geometric.data import Data, DataLoader
 
 
 class GNN(nn.Module):
-    def __init__(self, num_nodes, use_gdc, d=5):
+    def __init__(self, args):
         # what to do with use_gdc
+        
         super(GNN, self).__init__()
+        d=args.n_node_features
+        num_nodes = args.n_nodes_nnet
+        
         self.conv1 = GCNConv(d,  16)
         self.conv2 = GCNConv(16,  16)
         self.conv3 = GCNConv(16, 1)

@@ -57,11 +57,11 @@ def run_simulations(game, simulations, nodes):
 
 
 
-games, optimal = create_mcts_games(20, 8)
+games, optimal = create_mcts_games(20, 10)
 
 
 
-num_simulations = [500,1000,1500]
+num_simulations = [100,200,300,400,500,600,700,800,900,1000,1500,2000]
 
 result = []
 
@@ -83,6 +83,7 @@ for sim in num_simulations:
 
 print("Simulations done")
 print("Hello")
+plt.title("Plotting MCTS percentage within 1.1 of optimal with change in iterations")
 plt.xlabel('Number ofsimulations')
 plt.ylabel('MCTS Results')
 plt.plot(num_simulations, result)

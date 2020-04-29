@@ -23,12 +23,12 @@ args = dotdict({
 })
 
 # we are gonna gave to pass d, num_nodes and use_gdc to the neural net, or define those
-
+#LOOK AT HOW WE ARE GETTING THE ARGS AND PUSHING IT TO NNET
 
 class NNetWrapper():
-    def __init__(self, d, num_nodes, use_gdc):
-        self.nnet = GNN(num_nodes, use_gdc, d)
-        self.action_size = num_nodes
+    def __init__(self, args):
+        self.nnet = GNN(args)
+        self.action_size = args.n_nodes
 
     def train(self, examples):
         """
