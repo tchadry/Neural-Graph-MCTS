@@ -37,8 +37,8 @@ class MCTS():
             current_path, a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
         print(counts)
         if temp == 0:
-            bestAs = np.array(np.argwhere(counts == np.max(counts))).flatten()
-            bestA = np.random.choice(bestAs)
+            #bestAs = np.array(np.argwhere(counts == np.max(counts))).flatten()
+            bestA = np.argmax(counts)
             probs = [0]*len(counts)
             probs[bestA] = 1
             return probs
@@ -121,7 +121,7 @@ class MCTS():
 
             self.Vs[current_path] = valids
             self.Ns[current_path] = 0
-            return -v
+            return v
 
         valids = self.Vs[current_path]
         cur_best = -float('inf')
@@ -161,4 +161,4 @@ class MCTS():
             self.Nsa[(current_path, a)] = 1
 
         self.Ns[current_path] += 1
-        return -v
+        return v

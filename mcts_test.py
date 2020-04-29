@@ -15,7 +15,7 @@ def create_mcts_games( n, nodes):
 
     for i in range(n):
 
-        current = TspGame(8)
+        current = TspGame(n)
         optimal_res, _ = current.optimal_solution()
         games.append(current)
         optimal_results.append(optimal_res)
@@ -23,7 +23,7 @@ def create_mcts_games( n, nodes):
     return games, optimal_results
 
 
-def run_simulations(game, simulations):
+def run_simulations(game, simulations, n):
     """
     Given a TSP problem, run MCTS with `n_simulations`
     simulations before choosing an action.
@@ -33,7 +33,7 @@ def run_simulations(game, simulations):
 
     args = dotdict({
         'numMCTSSims': simulations,
-        'n_nodes': 8,
+        'n_nodes': n,
         'cpuct': 1
         })
 
@@ -57,11 +57,11 @@ def run_simulations(game, simulations):
 
 
 
-games, optimal = create_mcts_games(50, 10)
+games, optimal = create_mcts_games(20, 10)
 
 
 
-num_simulations = np.arange(100,2000,100)
+num_simulations = [500,1000,1500]
 
 result = []
 
@@ -72,13 +72,13 @@ for sim in num_simulations:
         
     good = 0
 
-    for i in range(50):
-        mcts_res = run_simulations(games[i],  sim)
+    for i in range(20):
+        mcts_res = run_simulations(games[i],  sim, 10)
             
         if mcts_res/optimal[i] < 1.1:
             good += 1
 
-    result.append(good/50)
+    result.append(good/20)
     print(result)
 
 print("Simulations done")
