@@ -14,13 +14,13 @@ from GNN import GNN
 sys.path.append('../../')
 
 
-args = dotdict({
-    'lr': 0.001,
-    'dropout': 0.3,
-    'epochs': 10,
-    'batch_size': 64,
-    'num_channels': 512,
-})
+#args = dotdict({
+    #'lr': 0.001,
+    #'dropout': 0.3,
+    #'epochs': 10,
+    #'batch_size': 64,
+    #'num_channels': 512,
+#})
 
 # we are gonna gave to pass d, num_nodes and use_gdc to the neural net, or define those
 #LOOK AT HOW WE ARE GETTING THE ARGS AND PUSHING IT TO NNET

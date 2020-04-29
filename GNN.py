@@ -8,7 +8,8 @@ from torch_geometric.nn import GCNConv, global_mean_pool
 from torch_geometric.data import Data, DataLoader
 
 # understand what use_gdc is, what num_nodes_features and n_nodes are
-
+# args we need: n_nodes_features, n_nodes
+ n_nodes_nnet
 
 class GNN(nn.Module):
     def __init__(self, args):
