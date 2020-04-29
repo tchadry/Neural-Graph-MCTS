@@ -1,5 +1,8 @@
 from util import dotdict
-
+from TspGame import TspGame
+from MCTS import MCTS
+import numpy as np
+import datetime
 # train the model: check training examples
 # training example: (current graph, pi, v)
 # pi is the MCTS informed policy vector, v is +1 if
@@ -16,26 +19,28 @@ args = dotdict({
     })
 
 training_examples = []
-
-n_games_to_train = 1000
-
-for i in range(n_games_to_train):
-    R = 0
-    game_examples = []
-    game = TspGame(args)
+num_games = 500
+for i in range(num_games):
+    total_pay = 0
+    current_training_examples = []
+    game = TspGame(N)
     mcts = MCTS(game, None, args)
+    path = [0] # starting positions, path is only at 0
 
-    state = game.getInitState()
-    while not game.getGameEnded(state):
-        pi = mcts.getActionProb(state)
-        game_examples.append([game.build_graph_from_state(state), pi])
+    while not game.getGameEnded(path):
+        pi = mcts.getActionProb(path)
         action = np.argmax(pi)
-        state, reward = game.getNextState(state, action)
-        R += reward
-        if game.getGameEnded(state):
-            for example in game_examples:
-                example.append(R)
-            game_examples = [tuple(x) for x in game_examples]
-    training_examples.extend(game_examples)
+        print(pi)
+        current_training_examples.append([game.construct_graph(path), pi])
+        path, pay = game.getNextState(path, action)
+        total_pay += pay
+        
+        if game.getGameEnded(path):
+            for example in training_examples:
+                example.append(pay)
+            training_examples = [tuple(x) for x in training_examples]
+
+    training_examples = training_examples + training_examples
+
     if i % 50 == 0:
         print("- Completed game {} -- {} training example done".format(i, len(training_examples)), datetime.datetime.now())
