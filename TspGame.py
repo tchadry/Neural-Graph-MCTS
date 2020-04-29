@@ -18,6 +18,14 @@ class TspGame():
 
         return self.n
 
+    def getInitBoard(self):
+        """
+        Returns:
+            startBoard: a representation of the board (ideally this is the form
+                        that will be the input to your neural network)
+        """
+        return [0]
+
     def getNextState(self, path, action):
         """
         Input:
