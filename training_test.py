@@ -2,6 +2,7 @@ from util import dotdict
 from TspGame import TspGame
 from MCTS import MCTS
 import numpy as np
+from random import shuffle
 import datetime
 # train the model: check training examples
 # training example: (current graph, pi, v)
@@ -38,9 +39,9 @@ for i in range(num_games):
         if game.getGameEnded(path):
             for example in training_examples:
                 example.append(pay)
-            training_examples = [tuple(x) for x in training_examples]
+            training_examples = [tuple(ex) for ex in training_examples]
 
     training_examples = training_examples + training_examples
 
-    if i % 50 == 0:
-        print("- Completed game {} -- {} training example done".format(i, len(training_examples)), datetime.datetime.now())
+    if i % 20 == 0:
+        print("------> Trained:   " + str(len(training_examples)) ) 
