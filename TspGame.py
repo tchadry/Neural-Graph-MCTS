@@ -48,27 +48,26 @@ class TspGame():
         Returns: torch geometric graph input Data
         '''
 
-        # CHECK THIS PART AGAIN!!!!
         current_graph = self.graph.copy()
         current_graph.nodes[0]['start'] = True
-        current_graph.nodes[path[-1]]['current'] = False
+        current_graph.nodes[path[-1]]['current'] = True
         for node in path:
             current_graph.nodes[node]['visited'] = True
 
         G = from_networkx(current_graph)
         G.x = torch.stack([G.visited.float(),
-                        G.first.float(),
+                        G.start.float(),
                         G.current.float(),
                         G.x.float(),
                         G.y.float()]).T
 
         G.current = None
-        G.first = None
+        G.start = None
         G.visited = None
         G.x = None
         G.y = None
 
-        print(G)
+        #print(G)
         return G
 
     def getValidMoves(self, path):
