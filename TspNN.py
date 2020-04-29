@@ -29,6 +29,7 @@ class NNetWrapper():
     def __init__(self, args):
         self.nnet = GNN(args)
         self.action_size = args.n_nodes
+        self.args = args
 
     def train(self, examples):
         """
@@ -38,7 +39,7 @@ class NNetWrapper():
         print('training')
         optimizer = torch.optim.Adam(self.nnet.parameters())
 
-        for epoch in range(args.epochs):
+        for epoch in range(self.args.epochs):
             print('EPOCH ::: ' + str(epoch+1))
 
             # first train
@@ -52,9 +53,9 @@ class NNetWrapper():
             batch_idx = 0
 
             # self.sess.run(tf.local_variables_initializer())
-            while batch_idx < len(examples)//args.batch_size:
+            while batch_idx < len(examples)//self.batch_size:
                 sample_ids = np.random.randint(
-                    len(examples), size=args.batch_size)
+                    len(examples), size=self.args.batch_size)
                 boards, pis, vs = list(zip(*[examples[i] for i in sample_ids]))
 
                 # get target data
@@ -67,7 +68,7 @@ class NNetWrapper():
 
                 # record loss
                 for idx, board in enumerate(boards):
-                    board = board.to(args.device)
+                    board = board.to(self.args.device)
                     pred_pi, pred_v = self.nnet(board)
                     final_pis[idx] = pred_pi
                     final_vs[idx] = pred_v
@@ -136,10 +137,10 @@ class NNetWrapper():
         else:
             print("Checkpoint Directory exists! ")
 
-        torch.save(self.nnet.state_dict(), filepath)
+        torch.save({'state_dict': self.nnet.state_dict()}, filepath)
 
     def load_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
         filepath = os.path.join(folder, filename)
-        if not os.path.exists(filepath+'.meta'):
+        if not os.path.exists(filepath):
             raise Exception("No model in path {}".format(filepath))
-        self.nnet.load_state_dict(torch.load(filepath))
+        self.nnet.load_state_dict(torch.load(filepath)['state_dict'])

@@ -1,6 +1,6 @@
 import torch
 #from TspNN import  NNetWrapper
-from old_wrapper import NNetWrapper as nn
+from TspNN import NNetWrapper as nn
 import os
 from TspGame import TspGame
 from Coach import Coach
