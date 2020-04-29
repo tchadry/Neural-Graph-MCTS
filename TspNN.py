@@ -1,7 +1,7 @@
 """NNet- inspired from alphazero Othello"""
 
 from util import dotdict, AverageMeter
-import tensorflow as tf
+
 import torch
 import os
 import shutil
@@ -53,7 +53,7 @@ class NNetWrapper():
             batch_idx = 0
 
             # self.sess.run(tf.local_variables_initializer())
-            while batch_idx < len(examples)//self.batch_size:
+            while batch_idx < len(examples)//self.args.batch_size:
                 sample_ids = np.random.randint(
                     len(examples), size=self.args.batch_size)
                 boards, pis, vs = list(zip(*[examples[i] for i in sample_ids]))
@@ -61,8 +61,8 @@ class NNetWrapper():
                 # get target data
                 target_pis = torch.FloatTensor(np.array(pis))
                 target_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
-                final_pis = torch.FloatTensor(np.array(pis))
-                final_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
+                final_pis = torch.zeros_like(target_pis)
+                final_vs = torch.zeros_like(target_vs)
                 # measure data loading time
                 data_time.update(time.time() - end)
 

@@ -21,10 +21,11 @@ args = dotdict({
     'cpuct': 1,
     'cuda': False,
 
-    'checkpoint': './temp/',
+    'checkpoint': './temp2/',
     'load_model': False,
-    'load_folder_file': ('./temp/', 'best.pth.tar'),
+    'load_folder_file': ('./temp2/', 'best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
+    'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
     'n_nodes': 8,
     'n_node_features': 5,
