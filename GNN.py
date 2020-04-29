@@ -11,7 +11,7 @@ from torch_geometric.data import Data, DataLoader
 
 
 class GNN(nn.Module):
-    def __init__(self, num_nodes, use_gdc, d=2):
+    def __init__(self, num_nodes, use_gdc, d=5):
         # what to do with use_gdc
         super(GNN, self).__init__()
         self.conv1 = GCNConv(d,  16)
@@ -25,7 +25,7 @@ class GNN(nn.Module):
         self.non_reg_params = self.conv2.parameters()
 
     def forward(self, data):
-        print("analyzing data")
+        #print("analyzing data")
         print(data)
 
         x, edges = data.x, data.edge_index

@@ -35,7 +35,7 @@ class MCTS():
         current_path = tuple(path)
         counts = [self.Nsa[(current_path, a)] if (
             current_path, a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
-        print(counts)
+        #print(counts)
         if temp == 0:
             #bestAs = np.array(np.argwhere(counts == np.max(counts))).flatten()
             bestA = np.argmax(counts)
@@ -45,7 +45,7 @@ class MCTS():
 
         counts = [x**(1./temp) for x in counts]
         counts_sum = float(sum(counts))
-        print(counts_sum)
+        #print(counts_sum)
         probs = [x/counts_sum for x in counts]
         return probs
 
@@ -128,8 +128,8 @@ class MCTS():
         best_act = -1
 
         # pick the action with the highest upper confidence bound
-        print(current)
-        print('evaluating valid actions in search')
+        #print(current)
+        #print('evaluating valid actions in search')
         for a in range(self.game.getActionSize()):
             if valids[a]:
                 # compute ucb
