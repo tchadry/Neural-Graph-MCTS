@@ -160,3 +160,4 @@ class Coach():
             f.closed
             # examples based on the model were already collected (loaded)
             self.skipFirstSelfPlay = True
+

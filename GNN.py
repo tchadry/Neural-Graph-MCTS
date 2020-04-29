@@ -52,3 +52,4 @@ class GNN(nn.Module):
         print("value: ", value.squeeze())
 
         return choice, value.squeeze()
+
