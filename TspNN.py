@@ -52,7 +52,7 @@ class NNetWrapper():
             batch_idx = 0
 
             # self.sess.run(tf.local_variables_initializer())
-            while batch_idx < int(len(examples)/args.batch_size):
+            while batch_idx < len(examples)//args.batch_size:
                 sample_ids = np.random.randint(
                     len(examples), size=args.batch_size)
                 boards, pis, vs = list(zip(*[examples[i] for i in sample_ids]))
@@ -82,9 +82,9 @@ class NNetWrapper():
                 v_losses.update(v_loss, len(boards))
 
                 # optimizer steps
-                torch.optimizer.zero_grad()
+                optimizer.zero_grad()
                 total_loss.backward()
-                torch.optimizar.step()
+                optimizer.step()
 
                 # measure elapsed time
                 batch_time.update(time.time() - end)
@@ -115,13 +115,14 @@ class NNetWrapper():
         with torch.no_grad():
             pred = self.nnet(board)
             if isinstance(pred, tuple):
+                pi, v = pred
+            else:
                 pi = None
                 v = pred
-            else:
-                pi, v = pred
+
 
         if pi is not None:
-            return pi.data.cpu().numpy(), v.item
+            return pi.data.cpu().numpy(), v.item()
         else:
             return pi, v.item()
 
@@ -140,5 +141,5 @@ class NNetWrapper():
     def load_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath+'.meta'):
-            raise("No model in path {}".format(filepath))
+            raise Exception("No model in path {}".format(filepath))
         self.nnet.load_state_dict(torch.load(filepath))

@@ -42,7 +42,7 @@ class Arena():
         #for both: 
 
         #get initial state 
-        current = self.game.getInitState() 
+        current = self.game.getInitBoard()
 
         #defining the needed variables
         first_pay=0
@@ -69,7 +69,7 @@ class Arena():
 
 
         #player 2
-        current=self.game.getInitState()
+        current=self.game.getInitBoard()
         end=self.game.getGameEnded(current)
         while not end:
           #we play until it reaches a terminal state
