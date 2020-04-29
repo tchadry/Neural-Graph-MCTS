@@ -16,11 +16,12 @@ class Coach():
     def __init__(self, game, nnet, args):
         self.game = game
         self.nnet = nnet
-        self.pnet = self.nnet.__class__(5, 8, True)  # TODO pass variable arguments # the competitor network
+        self.pnet = self.nnet.__class__(args)  # TODO pass variable arguments # the competitor network
         self.args = args
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []    # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False    # can be overriden in loadTrainExamples()
+        print(self.args)
 
     def executeEpisode(self):
         """

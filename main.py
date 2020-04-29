@@ -19,6 +19,7 @@ args = dotdict({
     'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
+    'cuda': False,
 
     'checkpoint': './temp/',
     'load_model': False,
@@ -27,7 +28,14 @@ args = dotdict({
 
     'n_nodes': 8,
     'n_node_features': 5,
-    'n_executions': 100
+    'n_executions': 100,
+
+    'lr': 0.001,
+    'dropout': 0.3,
+    'epochs': 10,
+    'batch_size': 64,
+    'use_gdc': True
+    
 })
 #args = dotdict({
     #'lr': 0.001,
@@ -37,7 +45,7 @@ args = dotdict({
     #'num_channels': 512,
 #})
 
-nnet = nn(args.n_node_features, args.n_nodes, True)
+nnet = nn(args)
 
 if args.load_model:
     nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
