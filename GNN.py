@@ -32,7 +32,7 @@ class GNN(nn.Module):
 
     def forward(self, data):
         #print("analyzing data")
-        print(data)
+        #print(data)
 
         x, edges = data.x, data.edge_index
 
@@ -49,7 +49,7 @@ class GNN(nn.Module):
         v = global_mean_pool(x, torch.zeros(data.num_nodes, dtype=torch.long))
         value = self.activ2(v)
 
-        print("value: ", value.squeeze())
+        #print("value: ", value.squeeze())
 
         return choice, value.squeeze()
 

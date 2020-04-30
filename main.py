@@ -12,11 +12,11 @@ class dotdict(dict):
 
 args = dotdict({
     'numIters': 10,
-    'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
+    'numEps': 10,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
-    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
+    'numMCTSSims': 100,          # Number of games moves for MCTS to simulate.
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
     'cuda': False,
@@ -27,9 +27,9 @@ args = dotdict({
     'numItersForTrainExamplesHistory': 20,
     'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
-    'n_nodes': 8,
+    'n_nodes': 5,
     'n_node_features': 5,
-    'n_executions': 100,
+    'n_executions': 20,
 
     'lr': 0.001,
     'dropout': 0.3,
@@ -52,7 +52,7 @@ if args.load_model:
     nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
 
 for i in range(0, args.n_executions):
-    print(f'Execution nr. {i + 1}')
+    print(f' ============>  Execution nr. {i + 1}    <============\n\n\n\n')
 
     g = TspGame(args.n_nodes)
     c = Coach(g, nnet, args)

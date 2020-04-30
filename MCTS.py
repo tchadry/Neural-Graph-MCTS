@@ -20,8 +20,6 @@ class MCTS():
         self.Es = {}        # stores game.getGameEnded ended for board s
         self.Vs = {}        # stores game.getValidMoves for board s
 
-        print(args)
-
     def getActionProb(self, path, temp=1):
         """
         This function performs numMCTSSims simulations of MCTS starting from
@@ -37,7 +35,7 @@ class MCTS():
         current_path = tuple(path)
         counts = [self.Nsa[(current_path, a)] if (
             current_path, a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
-        print(counts)
+        #print(counts)
         if temp == 0:
             #bestAs = np.array(np.argwhere(counts == np.max(counts))).flatten()
             bestA = np.argmax(counts)
@@ -47,7 +45,7 @@ class MCTS():
 
         counts = [x**(1./temp) for x in counts]
         counts_sum = float(sum(counts))
-        print(counts_sum)
+        #print(counts_sum)
         probs = [x/counts_sum for x in counts]
         return probs
 
@@ -95,7 +93,7 @@ class MCTS():
                 # check if were predicting both
                 if pred_p is not None:
                     # assign policy vector to pred_p
-                    print(pred_p,"pred_p:")
+                    #(pred_p,"pred_p:")
                     self.Ps[current_path] = pred_p
                 else:
                     self.Ps[current_path] = np.ones(n)
@@ -107,12 +105,12 @@ class MCTS():
 
             # now, we check for all valid moves
             valids = self.game.getValidMoves(current)
-            print(valids)
-            print(np.ones(n)*valids)
+            # print(valids)
+            # print(np.ones(n)*valids)
 
             # only keep the policy values for valid moves
             self.Ps[current_path] = self.Ps[current_path]*valids
-            print(self.Ps[current_path])# masking invalid moves
+            #print(self.Ps[current_path])# masking invalid moves
             sum_Ps_s = np.sum(self.Ps[current_path])
             if sum_Ps_s > 0:
                 self.Ps[current_path] /= sum_Ps_s    # renormalize
@@ -134,8 +132,8 @@ class MCTS():
         best_act = -1
         u=0
         # pick the action with the highest upper confidence bound
-        print(current)
-        print('evaluating valid actions in search')
+        #print(current)
+        #print('evaluating valid actions in search')
         for a in range(self.game.getActionSize()):
             if valids[a]:
                 # compute ucb
@@ -143,17 +141,17 @@ class MCTS():
                     u = self.Qsa[(current_path, a)] + self.args.cpuct*self.Ps[current_path][a] * \
                         math.sqrt(self.Ns[current_path]) / \
                         (1+self.Nsa[(current_path, a)])
-                    print("'doingif")
+                    #print("'doingif")
                 else:
-                    print(self.args.cpuct)
-                    print(self.Ps[current_path])
-                    print( math.sqrt(self.Ns[current_path] + EPS))
+                    #print(self.args.cpuct)
+                    #print(self.Ps[current_path])
+                    #print( math.sqrt(self.Ns[current_path] + EPS))
                     u = self.args.cpuct * \
                         self.Ps[current_path][a] * \
                         math.sqrt(self.Ns[current_path] + EPS)     # Q = 0 ?
-                    print("doingelse")
-                print(u)
-                print(cur_best)
+                    #print("doingelse")
+                #print(u)
+                #print(cur_best)
                 if u > cur_best:
                     cur_best = u
                     best_act = a
