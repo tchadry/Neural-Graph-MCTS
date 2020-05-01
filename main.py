@@ -10,13 +10,16 @@ class dotdict(dict):
     def __getattr__(self, name):
         return self[name]
 
+
+#arguments and their explanations
+
 args = dotdict({
-    'numIters': 10,
+    'numIters': 10, #number of times checkpoint will be saved during coach 
     'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
-    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
+    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate - the MCTS iterations
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
     'cuda': False,
@@ -27,9 +30,9 @@ args = dotdict({
     'numItersForTrainExamplesHistory': 20,
     'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
-    'n_nodes': 8,
-    'n_node_features': 5,
-    'n_executions': 100,
+    'n_nodes': 8, #number of nodes in the TSP problem 
+    'n_node_features': 5, #number of features in the node representations for GNN 
+    'n_executions': 100, #how many times we will be running our main loop and saving the iterations: 
 
     'lr': 0.001,
     'dropout': 0.3,
@@ -63,3 +66,7 @@ for i in range(0, args.n_executions):
     c.learn()
 
     c.nnet.save_checkpoint(folder=args.checkpoint, filename=f'Iteration_{i+1}')
+
+    #change test - edit
+    #edit 
+    #unclear whether we should test withcheckpoint or with iterations or ith best model. for now test with all of them 

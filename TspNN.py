@@ -63,6 +63,7 @@ class NNetWrapper():
                 target_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
                 final_pis = torch.zeros_like(target_pis)
                 final_vs = torch.zeros_like(target_vs)
+                
                 # measure data loading time
                 data_time.update(time.time() - end)
 
