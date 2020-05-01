@@ -57,7 +57,7 @@ def run_simulations(game, simulations, nodes=8):
 
 
 n_games = 100
-n_nodes = 8
+n_nodes = 20
 
 
 games, optimal = create_mcts_games(n_games, n_nodes)
@@ -68,7 +68,7 @@ games, optimal = create_mcts_games(n_games, n_nodes)
 # results for 100 x 9
 # [0.01, 0.14, 0.26, 0.32, 0.28, 0.36, 0.45, 0.49, 0.5, 0.53, 0.58, 0.56, 0.62, 0.69, 0.71, 0.73, 0.75, 0.8, 0.82, 0.86, 0.86, 0.85, 0.87, 0.91]
 
-num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000, 2500, 3000, 4000, 6000, 8000, 10000]
+num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000]#, 1500, 2000, 2500, 3000, 4000, 6000, 8000, 10000]
 
 result = []
 

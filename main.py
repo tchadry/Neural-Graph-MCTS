@@ -14,7 +14,7 @@ class dotdict(dict):
 #arguments and their explanations
 
 args = dotdict({
-    'numIters': 10, #number of times checkpoint will be saved during coach 
+    'numIters': 1, #number of times checkpoint will be saved during coach
     'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
@@ -24,19 +24,21 @@ args = dotdict({
     'cpuct': 1,
     'cuda': False,
 
-    'checkpoint': './temp2/',
+    'checkpoint': './new_models/',
     'load_model': False,
     'load_folder_file': ('./temp2/', 'best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
+
     'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
-    'n_nodes': 8, #number of nodes in the TSP problem 
-    'n_node_features': 5, #number of features in the node representations for GNN 
-    'n_executions': 100, #how many times we will be running our main loop and saving the iterations: 
+    'n_nodes': 15, #number of nodes in the TSP problem
+    'n_node_features': 5, #number of features in the node representations for GNN
+    'n_executions': 100, #how many times we will be running our main loop and saving the iterations:
+
 
     'lr': 0.001,
-    'dropout': 0.3,
-    'epochs': 10,
+    'dropout': 0.4,
+    'epochs': 100,
     'batch_size': 64,
     'use_gdc': True
     
@@ -54,8 +56,14 @@ nnet = nn(args)
 if args.load_model:
     nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
 
-for i in range(0, args.n_executions):
-    print(f'Execution nr. {i + 1}')
+
+#mcts_sims = num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400]#, 500, 600, 700, 800, 900, 1000, 1500, 2000, 2500, 3000, 4000, 6000, 8000, 10000]
+
+mcts_sims = [50]
+
+for n_sim in mcts_sims:
+
+    args.numMCTSSims = n_sim
 
     g = TspGame(args.n_nodes)
     c = Coach(g, nnet, args)
@@ -65,8 +73,6 @@ for i in range(0, args.n_executions):
         c.loadTrainExamples()
     c.learn()
 
-    c.nnet.save_checkpoint(folder=args.checkpoint, filename=f'Iteration_{i+1}')
 
-    #change test - edit
-    #edit 
-    #unclear whether we should test withcheckpoint or with iterations or ith best model. for now test with all of them 
+    c.nnet.save_checkpoint(folder=args.checkpoint, filename=f'best_model_{args.numMCTSSims}_mctsSims.pth.tar')
+
