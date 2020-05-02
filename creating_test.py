@@ -22,10 +22,10 @@ def create_mcts_games(num_games, nodes):
     return games_10_nodes, optimal_results
 
 
-games, optimal= create_mcts_games(num_games=1, nodes=10)
+games, optimal= create_mcts_games(num_games=20, nodes=12)
 
 
 
 
-with open('10nodestestfile', 'wb') as file:
+with open('12nodestestfile2', 'wb') as file:
      pickle.dump(games,file)
