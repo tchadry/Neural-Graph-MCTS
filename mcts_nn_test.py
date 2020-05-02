@@ -80,7 +80,7 @@ def predict_path(game, simulations, nnet=None):
 
 
 
-n_games = 100
+n_games = 75
 error = 1.01
 n_nodes = args.n_nodes
 
@@ -89,15 +89,20 @@ games, optimal = create_mcts_games(n_games, n_nodes)
 # temp4 chkpnt1, 8 nodes
 # [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
 
-num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900]#, 1000, 1500, 2000, 2500]
+num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000]#, 2500]
 
 #files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
-#files = ['checkpoint_1.pth.tar', 'none', 'checkpoint_50sims_1.pth.tar']
-files = ['checkpoint_1.pth.tar', 'none']
+#files = ['checkpoint_1.pth.tar', 'none']
+
+files = ['inv0_checkpoint_50sims_1.pth.tar', 'inv0_checkpoint_50sims_2.pth.tar', 'inv0_checkpoint_50sims_3.pth.tar',
+         'inv1_checkpoint_50sims_1.pth.tar', 'inv1_checkpoint_50sims_2.pth.tar', 'inv1_checkpoint_50sims_3.pth.tar',
+         'checkpoint_1.pth.tar', 'none']
 
 print(f'games: {n_games}\n'
       f'error: {error}\n'
       f'nodes: {args.n_nodes}')
+
+results = {}
 
 for file in files:
     print(f'File: {file}')
@@ -125,8 +130,9 @@ for file in files:
                 wins += 1
 
         result.append(wins/n_games)
-        print(result)
+        #print(result)
 
+    results[file] = result
     #print("Simulations done")
     #print("Hello")
     #plt.title("Plotting MCTS percentage within 1.1 of optimal with change in iterations")
@@ -134,3 +140,5 @@ for file in files:
     #plt.ylabel('MCTS Results')
     #plt.plot(num_simulations, result)
     #plt.show()
+
+print(results)
