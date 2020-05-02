@@ -11,6 +11,7 @@ import numpy as np
 import math
 import sys
 from GNN import GNN
+from pytorch_classification.utils import Bar
 sys.path.append('../../')
 
 
@@ -31,12 +32,14 @@ class NNetWrapper():
         self.action_size = args.n_nodes
         self.args = args
 
+        self.nnet = self.nnet.to(args.device)
+
     def train(self, examples):
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
 
-        print('training')
+        #print('training')
         optimizer = torch.optim.Adam(self.nnet.parameters())
 
         for epoch in range(self.args.epochs):
@@ -51,6 +54,7 @@ class NNetWrapper():
             end = time.time()
 
             batch_idx = 0
+            bar = Bar('Training Net', max=int(len(examples) / self.args.batch_size))
 
             # self.sess.run(tf.local_variables_initializer())
             while batch_idx < len(examples)//self.args.batch_size:
@@ -93,6 +97,20 @@ class NNetWrapper():
                 end = time.time()
                 batch_idx += 1
 
+                # plot progress
+                bar.suffix = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s | Total: {total:} | ETA: {eta:} | Loss_pi: {lpi:.4f} | Loss_v: {lv:.3f}'.format(
+                    batch=batch_idx,
+                    size=int(len(examples) / self.args.batch_size),
+                    data=data_time.avg,
+                    bt=batch_time.avg,
+                    total=bar.elapsed_td,
+                    eta=bar.eta_td,
+                    lpi=pi_losses.avg,
+                    lv=v_losses.avg,
+                )
+                bar.next()
+            bar.finish()
+
                 # add prints to track progress
 
     def pi_loss(self, targets, outputs):
@@ -115,7 +133,7 @@ class NNetWrapper():
         self.nnet.eval()
 
         with torch.no_grad():
-            pred = self.nnet(board)
+            pred = self.nnet(board.to(self.args.device))
             if isinstance(pred, tuple):
                 pi, v = pred
             else:

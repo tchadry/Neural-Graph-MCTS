@@ -17,10 +17,10 @@ class GNN(nn.Module):
         
         super(GNN, self).__init__()
         self.args=args
-        d=args.n_node_features
+        self.d=args.n_node_features
         num_nodes = args.n_nodes
         
-        self.conv1 = GCNConv(d,  16,normalize=not args.use_gdc)
+        self.conv1 = GCNConv(self.d,  16,normalize=not args.use_gdc)
         self.conv2 = GCNConv(16,  16,normalize=not args.use_gdc)
         self.conv3 = GCNConv(16, 1,normalize=not args.use_gdc)
         # then, we have to return a results for pi and v, respectively
@@ -46,7 +46,7 @@ class GNN(nn.Module):
         #choice = torch.masked_select(c.squeeze(), choices)
         choice = F.softmax(c, dim=0).view(self.args.n_nodes)
 
-        v = global_mean_pool(x, torch.zeros(data.num_nodes, dtype=torch.long))
+        v = global_mean_pool(x, torch.zeros(data.num_nodes, dtype=torch.long).to(self.args.device))
         value = self.activ2(v)
 
         #print("value: ", value.squeeze())
