@@ -22,16 +22,15 @@ args = dotdict({
     'numMCTSSims': 50,          # Number of games moves for MCTS to simulate - the MCTS iterations
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
-    'cuda': False,
 
     'checkpoint': './new_models/',
     'load_model': False,
     'load_folder_file': ('./temp2/', 'best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
 
-    'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
-    'n_nodes': 15, #number of nodes in the TSP problem
+
+
     'n_node_features': 5, #number of features in the node representations for GNN
     'n_executions': 100, #how many times we will be running our main loop and saving the iterations:
 
@@ -40,8 +39,15 @@ args = dotdict({
     'dropout': 0.4,
     'epochs': 100,
     'batch_size': 64,
-    'use_gdc': True
-    
+    'use_gdc': True,
+
+
+    'invert_probs': True,
+    'n_nodes': 8, #number of nodes in the TSP problem
+    #'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
+    'device': 'cpu',
+    'cuda': False,
+
 })
 #args = dotdict({
     #'lr': 0.001,
