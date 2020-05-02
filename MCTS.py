@@ -79,7 +79,7 @@ class MCTS():
 
         # then,we check to see if it is terminal node
         if self.Es[current_path] != 0:
-            return -self.Es[current_path]
+            return -self.game.path_pay(path)
 
         # then, we check if in self.PS, which stores initial policy
         if current_path not in self.Ps:
@@ -105,8 +105,6 @@ class MCTS():
 
             # now, we check for all valid moves
             valids = self.game.getValidMoves(current)
-            # print(valids)
-            # print(np.ones(n)*valids)
 
             # only keep the policy values for valid moves
             self.Ps[current_path] = self.Ps[current_path]*valids
