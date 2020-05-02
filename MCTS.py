@@ -79,7 +79,7 @@ class MCTS():
 
         # then,we check to see if it is terminal node
         if self.Es[current_path] != 0:
-            return 0
+            return -self.Es[current_path]
 
         # then, we check if in self.PS, which stores initial policy
         if current_path not in self.Ps:
@@ -93,14 +93,8 @@ class MCTS():
                 # check if were predicting both
                 if pred_p is not None:
                     # assign policy vector to pred_p
-
-                    if ('invert_probs' in self.args) and (self.args.invert_probs == True):
-                            self.Ps[current_path] = np.array([1 / (x + 1) for x in pred_p])
-                    else:
-                        self.Ps[current_path] = pred_p
-                    #input()
-                    #print(pred_p)
-
+                    #(pred_p,"pred_p:")
+                    self.Ps[current_path] = pred_p
                 else:
                     self.Ps[current_path] = np.ones(n)
 
@@ -111,7 +105,8 @@ class MCTS():
 
             # now, we check for all valid moves
             valids = self.game.getValidMoves(current)
-
+            # print(valids)
+            # print(np.ones(n)*valids)
 
             # only keep the policy values for valid moves
             self.Ps[current_path] = self.Ps[current_path]*valids
@@ -124,7 +119,7 @@ class MCTS():
 
                 # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
                 # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
-                #print("All valid moves were masked, do workaround.")
+                print("All valid moves were masked, do workaround.")
                 self.Ps[current_path] = self.Ps[current_path] + valids
                 self.Ps[current_path] /= np.sum(self.Ps[current_path])
 
