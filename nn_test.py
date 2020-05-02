@@ -67,7 +67,7 @@ def run_simulations(game, simulations, nodes, model=None):
 n_games = 20
 n_nodes = 5
 games, optimal= create_mcts_games(num_games=n_games, nodes=n_nodes)
-n_simulations = 100
+n_simulations = 500
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -92,26 +92,28 @@ nnet = NNetWrapper(args)
 results_no = []
 results_nn = []
 checkpoints_nn=[]
-sims=[]
+
+
+folder='./temp4/'
+filename='best.pth.tar'
+nnet.load_checkpoint(folder, filename)
 
 print("Beginning simulations -", datetime.datetime.now())
 start = datetime.datetime.now()
-for cp in np.arange(1,11,1):
+for sims in np.arange(100,1000,100):
     print("Beginning game checkpoint:", cp, datetime.datetime.now())
-    folder='./temp2/'
-    filename='checkpoint_{}.pth.tar'.format(cp)
-    nnet.load_checkpoint(folder, filename)
+
 
     good = 0
     for i in range(n_games):
         print(i)
 
-        score_of_mcts_path = run_simulations(games[i], n_simulations, nodes=n_nodes, model=nnet)
+        score_of_mcts_path = run_simulations(games[i], sims, nodes=n_nodes, model=nnet)
 
         if score_of_mcts_path/optimal[i] < 1.10:
             good += 1
 
-    checkpoints_nn.append(cp)
+    checkpoints_nn.append(sims)
     results_nn.append(good/n_games)
     print("results_nn:  " + str(results_nn))
         
@@ -119,37 +121,37 @@ print("DONE.", datetime.datetime.now())
 end = datetime.datetime.now()
 print("Elapsed:", end - start)
 
+for sims in np.arange(100,1000,100):
+    good = 0
+    for i in range(n_games):
+        if i % 10 == 0: print("- Game", i, datetime.datetime.now())
+        args = dotdict({
+            'numMCTSSims': sims,
+            'n_nodes': N_NODES,
+            'max_dist': 100,
+            'cpuct': 1,
+            'max_dist': 100
+            })
 
-good = 0
-for i in range(n_games):
-    if i % 10 == 0: print("- Game", i, datetime.datetime.now())
-    args = dotdict({
-        'numMCTSSims': n_simulations,
-        'n_nodes': N_NODES,
-        'max_dist': 100,
-        'cpuct': 1,
-        'max_dist': 100
-        })
+        mcts = MCTS(games[i], None, args)
 
-    mcts = MCTS(games[i], None, args)
+        state = [0]
+        R = 0
+        Actions = []
 
-    state = [0]
-    R = 0
-    Actions = []
+        while not games[i].getGameEnded(state):
+            action = np.argmax(mcts.getActionProb(state))
+            state, reward = games[i].getNextState(state, action)
+            Actions.append(action)
+            R += reward
+            
+        score_of_mcts_path = games[i].path_pay(Actions)
 
-    while not games[i].getGameEnded(state):
-        action = np.argmax(mcts.getActionProb(state))
-        state, reward = games[i].getNextState(state, action)
-        Actions.append(action)
-        R += reward
-        
-    score_of_mcts_path = games[i].path_pay(Actions)
+        if score_of_mcts_path/optimal[i] < 1.1:
+            good+= 1
 
-    if score_of_mcts_path/optimal[i] < 1.1:
-        good+= 1
 
-sims.append(n_simulations)
-results_no.append(good/n_games )
+    results_no.append(good/n_games)
 
 print(results_no)
 print(results_nn)
@@ -158,11 +160,12 @@ print(results_nn)
 #x = []
 #y = []
 #for key in sorted(results_nn):
-   # x.append((key+1)*10)
-    #y.append(results_nn[key])
+    #x.append((key+1)*10)
+  # y.append(results_nn[key])
 
-#nnet_100_line = plt.plot(x, y, label='MCTS with NNet, 100 sims')
-#mcts_100_line = plt.hlines(results_no[100] * 100, xmin=x[0], xmax=x[-1], label='MCTS without NNet, 100 sims')
-#plt.xlabel('Self-Play Epochs with NNet')
-#plt.ylabel('Percent Games within 1.1 of Optimal')
-#plt.legend()
+nnet_100_line = plt.plot(checkpoints_nn, results_nn, label='MCTS with NNet, 100 sims')
+mcts_100_line = plt.plot(checkpoints_nn, results_no,'MCTS without NNet, 100 sims')
+plt.xlabel('Self-Play Epochs with NNet')
+plt.ylabel('Percent Games within 1.1 of Optimal')
+plt.legend()
+plt.show()
