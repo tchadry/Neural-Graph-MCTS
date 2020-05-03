@@ -79,7 +79,7 @@ class MCTS():
 
         # then,we check to see if it is terminal node
         if self.Es[current_path] != 0:
-            return -self.Es[current_path]
+            return -self.game.path_pay(path)
 
         # then, we check if in self.PS, which stores initial policy
         if current_path not in self.Ps:

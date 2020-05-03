@@ -18,13 +18,13 @@ args = dotdict({
     'cpuct': 1,
     'cuda': False,
 
-    'checkpoint': './temp2/',
+    'checkpoint': './10nodesnew/',
     'load_model': False,
-    'load_folder_file': ('./temp2/', 'best.pth.tar'),
+    'load_folder_file': ('./10nodesnew/', 'best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
     # 'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
     'device': 'cpu',
-    'n_nodes': 8,
+    'n_nodes': 10,
     'n_node_features': 5,
     'n_executions': 100,
 
@@ -80,7 +80,7 @@ def predict_path(game, simulations, nnet=None):
 
 
 
-n_games = 100
+n_games =20
 n_nodes = args.n_nodes
 
 games, optimal = create_mcts_games(n_games, n_nodes)
@@ -88,10 +88,10 @@ games, optimal = create_mcts_games(n_games, n_nodes)
 # temp4 chkpnt1, 8 nodes
 # [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
 
-num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000]#, 1500, 2000, 2500]
+num_simulations = [1600,2000]# 1500, 2000, 2500]
 
 #files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
-files = ['checkpoint_1.pth.tar', 'none']
+files = ['checkpoint_1.pth.tar', None]
 
 
 for file in files:
@@ -100,7 +100,7 @@ for file in files:
 
     result = []
 
-    args.checkpoint = './temp4/'
+    args.checkpoint = './10nodesnew/'
     net = nn(args)
 
     if file != 'none':
@@ -120,7 +120,8 @@ for file in files:
                 wins += 1
 
         result.append(wins/n_games)
-        print(result)
+    print(file)
+    print(result)
 
     #print("Simulations done")
     #print("Hello")

@@ -10,8 +10,6 @@ class TspGame():
         self.n = n
         self.graph = util.random_graph(n)
 
-
-
     def getActionSize(self):
         """
         Returns:
@@ -100,11 +98,12 @@ class TspGame():
         """
         complete_path = [0] + list(path) + [0]
         pay = 0
+
+
         for i in range(len(complete_path) - 1):
             u = complete_path[i]
             v = complete_path[i+1]
-            #print(self.graph.nodes)
-            #input()
+ 
             pay += self.graph[u][v]['weight']
         return pay
 
