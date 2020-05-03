@@ -112,9 +112,9 @@ num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 8
 #files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
 #files = ['checkpoint_1.pth.tar', 'none']
 
-#files = ['inv0_1.tar', 'inv0_2.tar', 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
+files = ['inv0_1.tar', 'inv0_2.tar', 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
 
-files = ['inv0_1.tar']
+#files = ['inv0_1.tar']
 
 print(f'games: {n_games}\n'
       f'error: {error}\n'
@@ -170,7 +170,7 @@ def run_simulation(arguments):
 
     args.numMCTSSims = sim
 
-    print("testing simulations", sim)
+    #print("testing simulations", sim)
     wins = 0
 
     # Load net
@@ -187,7 +187,7 @@ def run_simulation(arguments):
         if optimal[i] * error >= predicted_cost:
             wins += 1
 
-    return (sim, wins / games)
+    return (sim, wins / n_games)
 
 
 #global_list = []
