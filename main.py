@@ -15,7 +15,7 @@ class dotdict(dict):
 
 args = dotdict({
     'numIters': 1, #number of times checkpoint will be saved during coach
-    'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
+    'numEps': 100,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
@@ -42,8 +42,8 @@ args = dotdict({
     'use_gdc': True,
 
 
-    'invert_probs': True,
-    'n_nodes': 8, #number of nodes in the TSP problem
+    'invert_probs': False,
+    'n_nodes': 20, #number of nodes in the TSP problem
     #'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
     'device': 'cpu',
     'cuda': False,
@@ -63,7 +63,7 @@ if args.load_model:
     nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
 
 
-#mcts_sims = num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400]#, 500, 600, 700, 800, 900, 1000, 1500, 2000, 2500, 3000, 4000, 6000, 8000, 10000]
+#mcts_sims = num_simulations = [5, 25, 50, 100, 200, 400, 1000]#, 500, 600, 700, 800, 900, 1000, 1500, 2000, 2500, 3000, 4000, 6000, 8000, 10000]
 
 mcts_sims = [50]
 

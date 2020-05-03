@@ -66,6 +66,8 @@ class NNetWrapper():
                 # get target data
                 target_pis = torch.FloatTensor(np.array(pis))
                 target_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
+
+
                 final_pis = torch.zeros_like(target_pis)
                 final_vs = torch.zeros_like(target_vs)
                 

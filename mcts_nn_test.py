@@ -107,12 +107,12 @@ games, optimal = create_mcts_games(n_games, n_nodes)
 # temp4 chkpnt1, 8 nodes
 # [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
 
-num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800]#, 900, 1000, 1500, 2000]#, 2500]
+num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500]#, 600, 700, 800]#, 900, 1000, 1500, 2000]#, 2500]
 
 #files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
 #files = ['checkpoint_1.pth.tar', 'none']
 
-files = ['inv0_1.tar', 'inv0_2.tar', 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
+files = ['inv0_1.tar', 'inv0_2.tar']#, 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
 
 #files = ['inv0_1.tar']
 
@@ -122,6 +122,63 @@ print(f'games: {n_games}\n'
 
 results = {}
 
+##########################################################################################################
+# Last level parallelization
+
+global_net = None
+global_args = None
+global_sim = None
+
+def run_game(i):
+
+    predicted_cost = predict_path(games[i], global_sim, global_args, global_net)
+
+    return optimal[i] * error >= predicted_cost
+
+
+
+def last_test_model(file):
+    print(f'File: {file}')
+    #print('################################################################################')
+
+    global global_args
+    global global_net
+    global global_sim
+
+    global_args = initial_args
+    global_args.checkpoint = './temp_models/'
+    global_net = nn(global_args)
+
+    result = []
+
+    if file != 'none':
+        global_net.load_checkpoint(global_args.checkpoint, filename=file)
+    else:
+        global_net = None
+
+    for sim in num_simulations:
+
+        #print("testing simulations", sim)
+
+        global_sim = sim
+
+        pool = Pool()
+        game_results = pool.map(run_game, list(range(n_games)))
+        pool.close()
+        pool.join()
+
+
+
+        result.append(sum(game_results) / n_games)
+
+    #print(result)
+
+    return result
+
+
+
+
+############################################################################################################
 def test_model(file):
     args = initial_args
     print(f'File: {file}')
@@ -224,12 +281,19 @@ def multi_test_model(file):
 parallel_models = True
 parallel_simulations = True
 
+last_level = True
+
 cpu_count = multiprocessing.cpu_count()
 pools = len(files)
 sim_pools = (cpu_count - pools) // pools
 
 
-if parallel_models:
+if last_level:
+    for file in files:
+        result = last_test_model(file)
+        results[file] = result
+
+elif parallel_models:
 
 
 
