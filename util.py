@@ -61,3 +61,10 @@ class dotdict(dict):
     def __setitem__(self, key, value):
         super(dotdict, self).__setitem__(key, value)
         self.__dict__.update({key: value})
+
+    def __getstate__(self):
+        return self
+
+    def __setstate__(self, d):
+        for key in d:
+            self.__setattr__(key, d[key])

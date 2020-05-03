@@ -112,7 +112,9 @@ num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 8
 #files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
 #files = ['checkpoint_1.pth.tar', 'none']
 
-files = ['inv0_1.tar', 'inv0_2.tar', 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
+#files = ['inv0_1.tar', 'inv0_2.tar', 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
+
+files = ['inv0_1.tar']
 
 print(f'games: {n_games}\n'
       f'error: {error}\n'
@@ -157,11 +159,28 @@ def test_model(file):
 # Multiprocessing for num_simulations
 
 def run_simulation(arguments):
-    sim, args, net = arguments
+
+
+
+    #print('In run_simulation')
+    #print(arguments)
+    #print(global_list)
+    #print('Out print')
+    sim, args, file = arguments
+
+    args.numMCTSSims = sim
 
     print("testing simulations", sim)
     wins = 0
 
+    # Load net
+    net = nn(args)
+    if file != 'none':
+        net.load_checkpoint(args.checkpoint, filename=file)
+    else:
+        net = None
+
+    # Simulate n games
     for i in range(n_games):
         predicted_cost = predict_path(games[i], sim, args, net)
 
@@ -171,25 +190,29 @@ def run_simulation(arguments):
     return (sim, wins / games)
 
 
+#global_list = []
 
-def multi_test_model(arguments):
-    file = arguments[0]
-    sim_pools = arguments[1]
+def multi_test_model(file):
+    #print(file, sim_pools)
+
 
     args = initial_args
-    print(f'File: {file}')
-    print('################################################################################')
+
+    #print(f'File: {file}')
+    #print('################################################################################')
 
     args.checkpoint = './temp_models/'
-    net = nn(args)
+    #print(args)
 
-    if file != 'none':
-        net.load_checkpoint(args.checkpoint, filename=file)
-    else:
-        net = None
 
     new_pool = Pool(sim_pools)
-    tuple_results = new_pool.map(run_simulation, list(zip(num_simulations, [args]*len(num_simulations), [net]*len(num_simulations))))
+    #print(new_pool)
+    #input()
+    #print(list(zip(num_simulations, [args]*len(num_simulations), [net]*len(num_simulations))))
+    tuple_results = new_pool.map(run_simulation, list(zip(num_simulations, [args]*len(num_simulations), [file]*len(num_simulations))))
+
+    #tuple_results = new_pool.map(run_simulation, global_list)
+
 
     # Sort by number of simulations performed
     tuple_results = sorted(tuple_results, key=lambda x: x[0])
@@ -201,9 +224,14 @@ def multi_test_model(arguments):
 parallel_models = True
 parallel_simulations = True
 
+cpu_count = multiprocessing.cpu_count()
+pools = len(files)
+sim_pools = (cpu_count - pools) // pools
+
+
 if parallel_models:
 
-    cpu_count = multiprocessing.cpu_count()
+
 
     # Only assign each cpu to a pool
     if cpu_count < 3*len(files) or not parallel_simulations:
@@ -216,11 +244,10 @@ if parallel_models:
         pool.join()
 
     else:
-        pools = len(files)
-        sim_pools = (cpu_count - pools) // pools
+
 
         pool = MyPool(pools)
-        tuple_results = pool.map(multi_test_model, list(zip(files, [sim_pools]*len(files))))
+        tuple_results = pool.map(multi_test_model, files)
         for t in tuple_results:
             results[t[0]] = t[1]
 
