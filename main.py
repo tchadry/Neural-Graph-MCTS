@@ -14,7 +14,7 @@ class dotdict(dict):
 #arguments and their explanations
 
 args = dotdict({
-    'numIters': 2, #number of times checkpoint will be saved during coach 
+    'numIters': 5, #number of times checkpoint will be saved during coach 
     'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
@@ -24,15 +24,15 @@ args = dotdict({
     'cpuct': 1,
     'cuda': False,
 
-    'checkpoint': './12nodes/',
+    'checkpoint': './10nodesFINAL/',
     'load_model': False,
-    'load_folder_file': ('./12nodes/', 'best.pth.tar'),
+    'load_folder_file': ('./10nodesFINAL/', 'best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
     'device': torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
     'n_nodes': 10, #number of nodes in the TSP problem 
     'n_node_features': 5, #number of features in the node representations for GNN 
-    'n_executions': 20, #how many times we will be running our main loop and saving the iterations: 
+    'n_executions': 30, #how many times we will be running our main loop and saving the iterations: 
 
     'lr': 0.001,
     'dropout': 0.3,

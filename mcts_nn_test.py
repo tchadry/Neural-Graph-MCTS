@@ -83,7 +83,8 @@ for file in files:
                 wins += 1
 
         result.append(wins/n_games)
-        print(result)
+    print(file)
+    print(result)
 
     print("Simulations done")
     plt.title("Plotting MCTS percentage within 1.1 of optimal with change in iterations")
