@@ -105,8 +105,6 @@ class MCTS():
 
             # now, we check for all valid moves
             valids = self.game.getValidMoves(current)
-            # print(valids)
-            # print(np.ones(n)*valids)
 
             # only keep the policy values for valid moves
             self.Ps[current_path] = self.Ps[current_path]*valids

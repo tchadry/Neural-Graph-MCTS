@@ -96,7 +96,7 @@ class TspGame():
         """
         path: a tuple of indices between 1 and self.args.n_nodes-1
         """
-        complete_path = [0] + list(path) + [0]
+        complete_path = list(path) + [0]
         pay = 0
 
 
