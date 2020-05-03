@@ -6,8 +6,8 @@ from util import dotdict
 from TspNN import NNetWrapper as nn
 from util import dotdict
 
-<<<<<<< HEAD
-args = dotdict({
+
+args2 = dotdict({
     'numIters': 10,
     'numEps': 50,  # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,  #
@@ -38,8 +38,8 @@ args = dotdict({
 
 
 })
-=======
->>>>>>> 7bf1b23eb3d63f1fdfbfe684c50df4ed83518ac7
+from main import args 
+
 
 def create_mcts_games(num_games, nodes=8):
     """
@@ -85,7 +85,7 @@ def predict_path(game, simulations, nnet=None):
 <<<<<<< HEAD
 
 n_games =20
-=======
+
 n_games = 10
 >>>>>>> 7bf1b23eb3d63f1fdfbfe684c50df4ed83518ac7
 n_nodes = args.n_nodes
@@ -95,9 +95,9 @@ games, optimal = create_mcts_games(n_games, n_nodes)
 # temp4 chkpnt1, 8 nodes
 # [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
 
-<<<<<<< HEAD
+
 num_simulations = [50,100,300,500,1000]# 1500, 2000, 2500]
-=======
+
 num_simulations = [500,1000,1500,2000]# 1500, 2000, 2500]
 >>>>>>> 7bf1b23eb3d63f1fdfbfe684c50df4ed83518ac7
 
@@ -110,10 +110,9 @@ for file in files:
     print('################################################################################')
 
     result = []
-<<<<<<< HEAD
+
     result2=[]
-=======
->>>>>>> 7bf1b23eb3d63f1fdfbfe684c50df4ed83518ac7
+
 
     args.checkpoint = './10nodesFINAL/'
     net = nn(args)
