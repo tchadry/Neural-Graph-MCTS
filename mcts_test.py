@@ -37,7 +37,7 @@ def run_simulations(game, simulations, nodes):
         'cpuct': 1
         })
 
-    mcts = MCTS(game, None, args
+    mcts = MCTS(game, None, args)
 
     current = [0]
     pay = 0
