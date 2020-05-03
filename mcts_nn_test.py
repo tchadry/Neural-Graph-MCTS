@@ -7,6 +7,22 @@ from TspNN import NNetWrapper as nn
 from util import dotdict
 from multiprocessing import Pool
 import multiprocessing
+import multiprocessing.pool
+
+class NoDaemonProcess(multiprocessing.Process):
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
+# because the latter is only a wrapper function, not a proper class.
+class MyPool(multiprocessing.pool.Pool):
+    Process = NoDaemonProcess
+
+
 
 initial_args = dotdict({
     'numIters': 10,
@@ -183,7 +199,7 @@ def multi_test_model(arguments):
 #######################################################################################################################
 
 parallel_models = True
-parallel_simulations = False
+parallel_simulations = True
 
 if parallel_models:
 
@@ -196,14 +212,20 @@ if parallel_models:
         for t in tuple_results:
             results[t[0]] = t[1]
 
+        pool.close()
+        pool.join()
+
     else:
         pools = len(files)
         sim_pools = (cpu_count - pools) // pools
 
-        pool = Pool(pools)
+        pool = MyPool(pools)
         tuple_results = pool.map(multi_test_model, list(zip(files, [sim_pools]*len(files))))
         for t in tuple_results:
             results[t[0]] = t[1]
+
+        pool.close()
+        pool.join()
 
 
 
