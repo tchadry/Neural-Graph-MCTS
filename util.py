@@ -51,5 +51,13 @@ class AverageMeter(object):
 
 
 class dotdict(dict):
-    def __getattr__(self, name):
-        return self[name]
+
+    def __getattr__(self, attr):
+        return self.get(attr)
+
+    def __setattr__(self, key, value):
+        self.__setitem__(key, value)
+
+    def __setitem__(self, key, value):
+        super(dotdict, self).__setitem__(key, value)
+        self.__dict__.update({key: value})
