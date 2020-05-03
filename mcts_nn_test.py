@@ -140,7 +140,8 @@ def test_model(file):
 #######################################################################################################################
 # Multiprocessing for num_simulations
 
-def run_simulation(sim, args, net):
+def run_simulation(arguments):
+    sim, args, net = arguments
 
     print("testing simulations", sim)
     wins = 0
@@ -155,7 +156,10 @@ def run_simulation(sim, args, net):
 
 
 
-def multi_test_model(file, sim_pools):
+def multi_test_model(arguments):
+    file = arguments[0]
+    sim_pools = arguments[1]
+
     args = initial_args
     print(f'File: {file}')
     print('################################################################################')
@@ -169,7 +173,7 @@ def multi_test_model(file, sim_pools):
         net = None
 
     new_pool = Pool(sim_pools)
-    tuple_results = new_pool.map(run_simulation, num_simulations, [args]*len(num_simulations), [net]*len(num_simulations))
+    tuple_results = new_pool.map(run_simulation, list(zip(num_simulations, [args]*len(num_simulations), [net]*len(num_simulations))))
 
     # Sort by number of simulations performed
     tuple_results = sorted(tuple_results, key=lambda x: x[0])
@@ -197,7 +201,7 @@ if parallel_models:
         sim_pools = (cpu_count - pools) // pools
 
         pool = Pool(pools)
-        tuple_results = pool.map(multi_test_model, files, [sim_pools]*len(files))
+        tuple_results = pool.map(multi_test_model, list(zip(files, [sim_pools]*len(files))))
         for t in tuple_results:
             results[t[0]] = t[1]
 
