@@ -100,7 +100,7 @@ nnet.load_checkpoint(folder, filename)
 
 print("Beginning simulations -", datetime.datetime.now())
 start = datetime.datetime.now()
-for sims in np.arange(100,1000,100):
+for sims in np.arange(100,2000,100):
     print("Beginning game checkpoint:", cp, datetime.datetime.now())
 
 
@@ -121,7 +121,7 @@ print("DONE.", datetime.datetime.now())
 end = datetime.datetime.now()
 print("Elapsed:", end - start)
 
-for sims in np.arange(100,1000,100):
+for sims in np.arange(100,2000,100):
     good = 0
     for i in range(n_games):
         if i % 10 == 0: print("- Game", i, datetime.datetime.now())

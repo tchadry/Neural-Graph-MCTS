@@ -96,15 +96,19 @@ class TspGame():
         """
         path: a tuple of indices between 1 and self.args.n_nodes-1
         """
-        complete_path = list(path) + [0]
+        complete_path =  [0]+ list(path) + [0]
+        if complete_path[0] == complete_path[1] and complete_path[1] == 0:
+            complete_path = complete_path[1:]
         pay = 0
 
-
+        
         for i in range(len(complete_path) - 1):
             u = complete_path[i]
             v = complete_path[i+1]
  
             pay += self.graph[u][v]['weight']
+
+
         return pay
 
     def optimal_solution(self):

@@ -14,7 +14,7 @@ class dotdict(dict):
 #arguments and their explanations
 
 args = dotdict({
-    'numIters': 5, #number of times checkpoint will be saved during coach 
+    'numIters': 2, #number of times checkpoint will be saved during coach 
     'numEps': 50,               # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.55,    #During arena playoff, new neural net will be accepted if threshold or more of games are won.
@@ -32,7 +32,7 @@ args = dotdict({
 
     'n_nodes': 10, #number of nodes in the TSP problem 
     'n_node_features': 5, #number of features in the node representations for GNN 
-    'n_executions': 30, #how many times we will be running our main loop and saving the iterations: 
+    'n_executions': 20, #how many times we will be running our main loop and saving the iterations: 
 
     'lr': 0.001,
     'dropout': 0.3,
