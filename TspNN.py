@@ -115,7 +115,7 @@ class NNetWrapper():
 
     def pi_loss(self, targets, outputs):
         # fill in
-        return -torch.sum(targets*outputs)/targets.size()[0]
+        return -torch.sum(targets*torch.log(outputs))/targets.size()[0]
 
     def v_loss(self, targets, outputs):
         # fill in

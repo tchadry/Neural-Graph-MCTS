@@ -5,7 +5,9 @@ from TspGame import TspGame
 from util import dotdict
 from TspNN import NNetWrapper as nn
 from util import dotdict
+from main import args
 
+<<<<<<< HEAD
 args = dotdict({
     'numIters': 10,
     'numEps': 50,  # Number of complete self-play games to simulate during a new iteration.
@@ -37,6 +39,8 @@ args = dotdict({
 
 
 })
+=======
+>>>>>>> 24da54930c60f6ce0929cdf8f4ef7d61a183d316
 
 def create_mcts_games(num_games, nodes=8):
     """
@@ -63,6 +67,7 @@ def predict_path(game, simulations, nnet=None):
 
     Returns value of MCTS path
     """
+
     args.numMCTSSims = simulations
 
     mcts = MCTS(game, nnet, args)
@@ -74,24 +79,25 @@ def predict_path(game, simulations, nnet=None):
         action = np.argmax(predictions)
         path.append(action)
 
-    #print(path)
-    #input()
-    return  game.path_pay(tuple(path[1:]))
+    return  game.path_pay(tuple(path))
 
 
 
-n_games =20
+n_games = 10
 n_nodes = args.n_nodes
 
 games, optimal = create_mcts_games(n_games, n_nodes)
 
+<<<<<<< HEAD
 # temp4 chkpnt1, 8 nodes
 # [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
 
 num_simulations = [500,1000,1500,2000]# 1500, 2000, 2500]
+=======
+num_simulations = np.arange(100, 3000, 200)
+>>>>>>> 24da54930c60f6ce0929cdf8f4ef7d61a183d316
 
-#files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
-files = [ 'checkpoint_1.pth.tar','none']
+files = ['best.pth.tar', 'none']
 
 
 for file in files:
@@ -99,13 +105,16 @@ for file in files:
     print('################################################################################')
 
     result = []
+<<<<<<< HEAD
 
     args.checkpoint = './10nodesFINAL/'
+=======
+>>>>>>> 24da54930c60f6ce0929cdf8f4ef7d61a183d316
     net = nn(args)
 
     if file != 'none':
         net.load_checkpoint(args.checkpoint, filename=file)
-    else:
+    else: 
         net = None
 
     for sim in num_simulations:
@@ -123,10 +132,9 @@ for file in files:
     print(file)
     print(result)
 
-    #print("Simulations done")
-    #print("Hello")
-    #plt.title("Plotting MCTS percentage within 1.1 of optimal with change in iterations")
-    #plt.xlabel('Number ofsimulations')
-    #plt.ylabel('MCTS Results')
-    #plt.plot(num_simulations, result)
-    #plt.show()
+    print("Simulations done")
+    plt.title("Plotting MCTS percentage within 1.1 of optimal with change in iterations")
+    plt.xlabel('Number ofsimulations')
+    plt.ylabel('MCTS Results')
+    plt.plot(num_simulations, result)
+    plt.show()

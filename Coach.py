@@ -21,7 +21,7 @@ class Coach():
         self.mcts = MCTS(self.game, self.nnet, self.args)
         self.trainExamplesHistory = []    # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False    # can be overriden in loadTrainExamples()
-        print(self.args)
+        #print(self.args)
 
     def executeEpisode(self):
         """
@@ -44,24 +44,21 @@ class Coach():
         board = self.game.getInitBoard()
         episodeStep = 0
 
+        final_pay = 0 
         while True:
             episodeStep += 1
-            #canonicalBoard = self.game.getCanonicalForm(board,self.curPlayer)
             temp = int(episodeStep < self.args.tempThreshold)
-            total_pay = 0
-            #print(board, temp)
-            #input()
+
             pi = self.mcts.getActionProb(board, temp=temp)
             trainExamples.append([self.game.construct_graph(board), pi, None])
 
             action = np.random.choice(len(pi), p=pi)
             board, pay = self.game.getNextState(board, action)
-            total_pay += pay
 
-            #r = self.game.getGameEnded(board, self.curPlayer)
+            final_pay += pay
 
             if self.game.getGameEnded(board):
-                return [(x[0],x[1],total_pay) for x in trainExamples]
+                return [(example[0], example[1], final_pay) for example in trainExamples]
 
     def learn(self):
         """
@@ -74,7 +71,7 @@ class Coach():
 
         for i in range(1, self.args.numIters+1):
             # bookkeeping
-            print('------ITER ' + str(i) + '------')
+            print('Iteration   ' + str(i) + '------')
             # examples of the iteration
             if not self.skipFirstSelfPlay or i>1:
                 iterationTrainExamples = deque([], maxlen=self.args.maxlenOfQueue)
@@ -160,4 +157,3 @@ class Coach():
             f.closed
             # examples based on the model were already collected (loaded)
             self.skipFirstSelfPlay = True
-
