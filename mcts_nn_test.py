@@ -97,28 +97,7 @@ def predict_path(game, simulations, args, nnet=None):
     return  game.path_pay(tuple(path[1:]))
 
 
-
-n_games = 100
-error = 1.01
 n_nodes = initial_args.n_nodes
-
-games, optimal = create_mcts_games(n_games, n_nodes)
-
-# temp4 chkpnt1, 8 nodes
-# [0.01, 0.01, 0.03, 0.05, 0.07, 0.13, 0.14, 0.11, 0.16, 0.21, 0.32, 0.29, 0.41, 0.46, 0.5, 0.43, 0.53, 0.71, 0.69, 0.78, 0.69, 0.74, 0.85, 0.77]
-
-num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500]#, 600, 700, 800]#, 900, 1000, 1500, 2000]#, 2500]
-
-#files = ['best.pth.tar', 'checkpoint_1.pth.tar', 'checkpoint_2.pth.tar', 'checkpoint_4.pth.tar', 'checkpoint_8.pth.tar', 'none']
-#files = ['checkpoint_1.pth.tar', 'none']
-
-files = ['inv0_1.tar', 'inv0_2.tar']#, 'inv0_3.tar', 'inv1_1.tar', 'inv1_2.tar', 'inv1_3.tar']
-
-#files = ['inv0_1.tar']
-
-print(f'games: {n_games}\n'
-      f'error: {error}\n'
-      f'nodes: {initial_args.n_nodes}')
 
 results = {}
 
@@ -139,7 +118,6 @@ def run_game(i):
 
 def last_test_model(file):
     print(f'File: {file}')
-    #print('################################################################################')
 
     global global_args
     global global_net
@@ -175,10 +153,8 @@ def last_test_model(file):
 
     return result
 
-
-
-
 ############################################################################################################
+
 def test_model(file):
     args = initial_args
     print(f'File: {file}')
@@ -217,17 +193,10 @@ def test_model(file):
 
 def run_simulation(arguments):
 
-
-
-    #print('In run_simulation')
-    #print(arguments)
-    #print(global_list)
-    #print('Out print')
     sim, args, file = arguments
 
     args.numMCTSSims = sim
 
-    #print("testing simulations", sim)
     wins = 0
 
     # Load net
@@ -255,17 +224,11 @@ def multi_test_model(file):
 
     args = initial_args
 
-    #print(f'File: {file}')
-    #print('################################################################################')
-
     args.checkpoint = './temp_models/'
-    #print(args)
 
 
     new_pool = Pool(sim_pools)
-    #print(new_pool)
-    #input()
-    #print(list(zip(num_simulations, [args]*len(num_simulations), [net]*len(num_simulations))))
+
     tuple_results = new_pool.map(run_simulation, list(zip(num_simulations, [args]*len(num_simulations), [file]*len(num_simulations))))
 
     #tuple_results = new_pool.map(run_simulation, global_list)
@@ -277,12 +240,27 @@ def multi_test_model(file):
 
     return (file, result)
 #######################################################################################################################
+n_games = 100
+error = 1.01
+
+games, optimal = create_mcts_games(n_games, n_nodes)
+
+
+num_simulations = [5, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500]#, 600, 700, 800]#, 900, 1000, 1500, 2000]#, 2500]
+
+# NB: include 'none' as a file for mcts only evaluaton
+files = ['inv0_1.tar', 'inv0_2.tar', 'none']
+
+print(f'games: {n_games}\n'
+      f'error: {error}\n'
+      f'nodes: {initial_args.n_nodes}')
+
+
+
 
 parallel_models = True
 parallel_simulations = True
-
 last_level = True
-
 cpu_count = multiprocessing.cpu_count()
 pools = len(files)
 sim_pools = (cpu_count - pools) // pools
@@ -292,11 +270,7 @@ if last_level:
     for file in files:
         result = last_test_model(file)
         results[file] = result
-
 elif parallel_models:
-
-
-
     # Only assign each cpu to a pool
     if cpu_count < 3*len(files) or not parallel_simulations:
         pool = Pool()
@@ -308,18 +282,12 @@ elif parallel_models:
         pool.join()
 
     else:
-
-
         pool = MyPool(pools)
         tuple_results = pool.map(multi_test_model, files)
         for t in tuple_results:
             results[t[0]] = t[1]
-
         pool.close()
         pool.join()
-
-
-
 else:
     for file in files:
         result = test_model(file)
