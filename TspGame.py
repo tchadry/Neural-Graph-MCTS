@@ -3,6 +3,9 @@ from itertools import permutations
 import util
 import numpy as np
 import torch
+from tsp_solver.greedy import solve_tsp
+import networkx as nx
+
 
 class TspGame():
 
@@ -112,7 +115,19 @@ class TspGame():
         return pay
 
     def optimal_solution(self):
-        
+
+        if self.n > 9:
+            adj_matrix = nx.adjacency_matrix(self.graph)
+            best_path = solve_tsp(adj_matrix.todense().tolist())
+
+            if best_path[-1] == 0:
+                best_path.pop()
+            else:
+                best_path = best_path[best_path.index(0) + 1:] + best_path[:best_path.index(0)]
+
+            best_score = self.path_pay(best_path)
+            return best_score, best_path
+
         optimal_path = None
         optimal_cost = float('inf')
 
@@ -126,4 +141,3 @@ class TspGame():
                 optimal_path = permutation
 
         return (optimal_cost, optimal_path)
-

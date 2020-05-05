@@ -13,6 +13,7 @@ import sys
 from GNN import GNN
 from pytorch_classification.utils import Bar
 sys.path.append('../../')
+from torch import nn
 
 
 #args = dotdict({
@@ -65,6 +66,8 @@ class NNetWrapper():
                 # get target data
                 target_pis = torch.FloatTensor(np.array(pis))
                 target_vs = torch.FloatTensor(np.array(vs).astype(np.float64))
+
+
                 final_pis = torch.zeros_like(target_pis)
                 final_vs = torch.zeros_like(target_vs)
                 
@@ -78,8 +81,11 @@ class NNetWrapper():
                     final_pis[idx] = pred_pi
                     final_vs[idx] = pred_v
 
+                ce_loss = nn.BCELoss()
+
                 # compute and record losses - we need to create these loss functions
-                pi_loss = self.pi_loss(target_pis, final_pis)
+                #pi_loss = self.pi_loss(target_pis, final_pis)
+                pi_loss = ce_loss(final_pis, target_pis)
                 v_loss = self.v_loss(target_vs, final_vs)
 
                 total_loss = pi_loss + v_loss
