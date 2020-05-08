@@ -58,7 +58,7 @@ class GNN_norm(nn.Module):
     def __init__(self, args):
         # what to do with use_gdc
 
-        super(GNN, self).__init__()
+        super(GNN_norm, self).__init__()
         self.args = args
         self.d = args.n_node_features
         num_nodes = args.n_nodes
@@ -96,12 +96,14 @@ class GNN_norm(nn.Module):
         x = F.relu(x)
 
         c = self.conv3(x, edges, weights)
-
         #print(c)
         #input()
 
         # choice = torch.masked_select(c.squeeze(), choices)
         choice = F.softmax(c, dim=0).view(self.args.n_nodes)
+
+        print(choice)
+        input()
 
         v = global_mean_pool(x, torch.zeros(data.num_nodes, dtype=torch.long).to(self.args.device))
         value = self.activ2(v)
@@ -230,3 +232,6 @@ class GNN_deep(nn.Module):
         # print("value: ", value.squeeze())
 
         return choice, value.squeeze()
+
+
+

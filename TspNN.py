@@ -10,7 +10,13 @@ import random
 import numpy as np
 import math
 import sys
-from GNN import GNN
+#from GNN import GNN
+
+#from gcn import GCN as GNN
+#from gcn import GCNWithJK as GNN
+from GNN import GNN_norm as GNN
+
+
 from pytorch_classification.utils import Bar
 sys.path.append('../../')
 from torch import nn
@@ -125,6 +131,8 @@ class NNetWrapper():
 
     def v_loss(self, targets, outputs):
         # fill in
+        #print(targets.size())
+        #input()
         res = (targets-outputs.view(-1))**2
         return torch.sum(res)/targets.size()[0]
 
@@ -134,6 +142,9 @@ class NNetWrapper():
         """
         board: pytorch object
         """
+
+        #print(board.x)
+        #input()
 
         # preparing input
         self.nnet.eval()

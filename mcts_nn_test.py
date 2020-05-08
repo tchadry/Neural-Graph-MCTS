@@ -258,9 +258,9 @@ print(f'games: {n_games}\n'
 
 
 
-parallel_models = True
-parallel_simulations = True
-last_level = True
+parallel_models = False
+parallel_simulations = False
+last_level = False
 cpu_count = multiprocessing.cpu_count()
 pools = len(files)
 sim_pools = (cpu_count - pools) // pools

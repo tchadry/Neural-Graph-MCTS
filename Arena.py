@@ -109,7 +109,7 @@ class Arena():
         end = time.time()
         eps = 0
 
-        num = int(num/2)
+        #num = int(num/2)
         oneWon = 0
         twoWon = 0
         draws = 0
